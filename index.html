@@ -1,15 +1,553 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Account Deletion Request</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>删除账户信息 - 用户管理中心</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #e63946, #d90429);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .warning-icon {
+            color: #e0a800;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .warning-box h3 {
+            color: #856404;
+            margin-bottom: 8px;
+        }
+        
+        .warning-box ul {
+            margin-left: 20px;
+            color: #856404;
+        }
+        
+        .warning-box li {
+            margin-bottom: 8px;
+        }
+        
+        .user-info {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .user-info h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .info-row {
+            display: flex;
+            margin-bottom: 12px;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            min-width: 120px;
+            color: #6c757d;
+        }
+        
+        .info-value {
+            color: #212529;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-section h3 {
+            margin-bottom: 15px;
+            color: #495057;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: #e63946;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .confirmation {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-container input {
+            margin-top: 5px;
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-delete {
+            background-color: #e63946;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-delete:hover {
+            background-color: #d0001b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 57, 70, 0.2);
+        }
+        
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-cancel:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            animation: modalFade 0.3s;
+        }
+        
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            background-color: #e63946;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .modal-body {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .modal-footer {
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .modal-btn {
+            padding: 12px 25px;
+            min-width: 120px;
+        }
+        
+        .success-message {
+            display: none;
+            padding: 20px;
+            background-color: #d4edda;
+            color: #155724;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 14px;
+            border-top: 1px solid #dee2e6;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            .content {
+                padding: 25px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .info-row {
+                flex-direction: column;
+                margin-bottom: 15px;
+            }
+            
+            .info-label {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Account Deletion Request</h1>
-    <strong>Application Name:</strong> [填写你的App名称]
-    <strong>Developer Name:</strong> [填写你的公司/个人名称]
-    <h2>How to Delete Your Account</h2>
-    To delete your account, please send an email to <a href=" ">delete@example.com</a > with the subject "Delete My Account" and include your registered email address or user ID.
-    <strong>Data Retention:</strong> After deletion, all personal profile data will be permanently removed. Transaction records required by law will be retained for 180 days.
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-user-slash"></i> 删除账户信息</h1>
+            <p>永久删除您的账户和个人信息</p>
+        </header>
+        
+        <div class="content">
+            <div class="warning-box">
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div>
+                    <h3>重要提示：此操作不可逆</h3>
+                    <p>删除账户后，以下信息将永久丢失且无法恢复：</p>
+                    <ul>
+                        <li>您的个人资料、设置和偏好</li>
+                        <li>所有历史记录和活动数据</li>
+                        <li>已保存的内容、收藏和列表</li>
+                        <li>与账户关联的所有订阅和会员资格</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="user-info">
+                <h3>当前账户信息</h3>
+                <div class="info-row">
+                    <div class="info-label">用户名：</div>
+                    <div class="info-value" id="username">user_example123</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">邮箱：</div>
+                    <div class="info-value" id="userEmail">user@example.com</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">注册时间：</div>
+                    <div class="info-value" id="regDate">2024年3月15日</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">最后登录：</div>
+                    <div class="info-value" id="lastLogin">2026年3月3日 14:30</div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3>删除原因（可选）</h3>
+                <div class="form-group">
+                    <label for="deleteReason">帮助我们改进服务</label>
+                    <select id="deleteReason">
+                        <option value="">请选择删除原因（可选）</option>
+                        <option value="privacy">隐私担忧</option>
+                        <option value="usability">使用体验不佳</option>
+                        <option value="alternative">找到了更好的替代服务</option>
+                        <option value="notUseful">不再需要使用此服务</option>
+                        <option value="other">其他原因</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="additionalInfo">其他反馈（可选）</label>
+                    <textarea id="additionalInfo" placeholder="请提供更多详细信息，帮助我们改进..."></textarea>
+                </div>
+            </div>
+            
+            <div class="confirmation">
+                <h3>最终确认</h3>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="confirmBackup">
+                    <label for="confirmBackup">我确认已备份或下载了所有需要保留的数据和信息</label>
+                </div>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="confirmUnderstood">
+                    <label for="confirmUnderstood">我理解此操作是永久性的，删除后所有数据将无法恢复</label>
+                </div>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="confirmFinal">
+                    <label for="confirmFinal">是的，我确定要永久删除我的账户和所有相关信息</label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">请输入您的密码以确认操作</label>
+                    <input type="password" id="confirmPassword" placeholder="请输入您的账户密码">
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-cancel" id="cancelBtn">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="btn btn-delete" id="deleteBtn" disabled>
+                    <i class="fas fa-trash-alt"></i> 永久删除账户
+                </button>
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle" style="font-size: 24px; margin-bottom: 10px;"></i>
+                <h3>删除请求已提交</h3>
+                <p>您的账户删除请求已成功提交。我们将在24小时内处理您的请求。如有任何问题，请联系客服。</p>
+                <p>感谢您曾经使用我们的服务！</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2026 用户管理中心 | 隐私政策 | 服务条款</p>
+            <p>如需帮助，请联系：support@example.com</p>
+        </footer>
+    </div>
+    
+    <!-- 确认删除模态框 -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-exclamation-circle"></i> 最后确认</h2>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 18px; margin-bottom: 15px;">您确定要永久删除您的账户吗？</p>
+                <p style="color: #e63946; font-weight: 600;">此操作不可撤销，所有数据将永久丢失。</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel modal-btn" id="modalCancelBtn">取消</button>
+                <button class="btn btn-delete modal-btn" id="modalConfirmBtn">确认永久删除</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM元素
+        const deleteBtn = document.getElementById('deleteBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const confirmModal = document.getElementById('confirmModal');
+        const modalCancelBtn = document.getElementById('modalCancelBtn');
+        const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+        const successMessage = document.getElementById('successMessage');
+        
+        // 确认复选框
+        const confirmBackup = document.getElementById('confirmBackup');
+        const confirmUnderstood = document.getElementById('confirmUnderstood');
+        const confirmFinal = document.getElementById('confirmFinal');
+        const confirmPassword = document.getElementById('confirmPassword');
+        
+        // 更新删除按钮状态
+        function updateDeleteButton() {
+            const isAllChecked = confirmBackup.checked && confirmUnderstood.checked && confirmFinal.checked;
+            const hasPassword = confirmPassword.value.trim().length > 0;
+            
+            deleteBtn.disabled = !(isAllChecked && hasPassword);
+        }
+        
+        // 添加事件监听器
+        confirmBackup.addEventListener('change', updateDeleteButton);
+        confirmUnderstood.addEventListener('change', updateDeleteButton);
+        confirmFinal.addEventListener('change', updateDeleteButton);
+        confirmPassword.addEventListener('input', updateDeleteButton);
+        
+        // 删除按钮点击
+        deleteBtn.addEventListener('click', () => {
+            confirmModal.style.display = 'flex';
+        });
+        
+        // 取消按钮点击
+        cancelBtn.addEventListener('click', () => {
+            if (confirm("您确定要取消删除操作吗？所有已填写的信息将丢失。")) {
+                // 在实际应用中，这里可能会重定向到其他页面
+                alert("删除操作已取消。");
+                // 重置表单
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                document.getElementById('confirmPassword').value = '';
+                document.getElementById('deleteReason').selectedIndex = 0;
+                document.getElementById('additionalInfo').value = '';
+                updateDeleteButton();
+            }
+        });
+        
+        // 模态框取消按钮
+        modalCancelBtn.addEventListener('click', () => {
+            confirmModal.style.display = 'none';
+        });
+        
+        // 模态框确认删除按钮
+        modalConfirmBtn.addEventListener('click', () => {
+            // 在实际应用中，这里应该向服务器发送删除请求
+            // 模拟删除请求
+            confirmModal.style.display = 'none';
+            
+            // 显示成功消息
+            successMessage.style.display = 'block';
+            
+            // 禁用所有输入和按钮
+            document.querySelectorAll('input, select, textarea, button').forEach(element => {
+                element.disabled = true;
+            });
+            
+            // 更改删除按钮文本
+            deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 处理中...';
+            
+            // 模拟处理延迟
+            setTimeout(() => {
+                deleteBtn.style.display = 'none';
+                cancelBtn.style.display = 'none';
+                
+                // 实际应用中，这里可能会重定向到主页或显示确认消息
+                console.log("账户删除请求已提交。");
+            }, 1500);
+        });
+        
+        // 点击模态框外部关闭
+        confirmModal.addEventListener('click', (e) => {
+            if (e.target === confirmModal) {
+                confirmModal.style.display = 'none';
+            }
+        });
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 在实际应用中，这里可能会从服务器获取用户信息
+            // 模拟用户数据
+            const userData = {
+                username: "user_" + Math.floor(Math.random() * 10000),
+                email: "user" + Math.floor(Math.random() * 1000) + "@example.com",
+                regDate: "202" + Math.floor(Math.random() * 4) + "年" + 
+                         (Math.floor(Math.random() * 12) + 1) + "月" + 
+                         (Math.floor(Math.random() * 28) + 1) + "日",
+                lastLogin: "2026年3月" + (Math.floor(Math.random() * 3) + 1) + "日 " + 
+                          (Math.floor(Math.random() * 12) + 8) + ":" + 
+                          (Math.floor(Math.random() * 60)).toString().padStart(2, '0')
+            };
+            
+            // 填充用户信息
+            document.getElementById('username').textContent = userData.username;
+            document.getElementById('userEmail').textContent = userData.email;
+            document.getElementById('regDate').textContent = userData.regDate;
+            document.getElementById('lastLogin').textContent = userData.lastLogin;
+        });
+    </script>
 </body>
 </html>
